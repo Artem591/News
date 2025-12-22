@@ -36,6 +36,7 @@ const availableCategories = ref([]);
 const loadCategories = async () => {
   try {
     const response = await api.getCategories();
+<<<<<<< HEAD
     console.log('Ответ категорий:', response);
     
     availableCategories.value = response.data.data.map(cat => ({
@@ -45,6 +46,15 @@ const loadCategories = async () => {
   } catch (err) {
     console.error('Не удалось загрузить категории:', err);
     console.error('URL запроса:', err.config?.url);
+=======
+    // Предполагается, что категории — { id, name, slug }
+    availableCategories.value = response.data.data.map(cat => ({
+      label: cat.name || cat.slug,
+      value: cat.slug
+    }));
+  } catch (err) {
+    console.error('Не удалось загрузить категории:', err);
+>>>>>>> 2a5282fdab7d620860aad9d55da61efbc77744fd
   }
 };
 
@@ -55,7 +65,11 @@ const loadArticles = async (page = 1) => {
 
   try {
     const params = {
+<<<<<<< HEAD
       page: page,
+=======
+      page: meta.value.page,
+>>>>>>> 2a5282fdab7d620860aad9d55da61efbc77744fd
       pageSize: filters.value.pageSize,
       sort: filters.value.sort,
       category: filters.value.category
@@ -65,7 +79,11 @@ const loadArticles = async (page = 1) => {
     articles.value = response.data.data;
     meta.value = response.data.meta.pagination;
   } catch (err) {
+<<<<<<< HEAD
     console.error('Ошибка загрузки статей:', err.response || err);
+=======
+    console.error('Ошибка загрузки статей:', err);
+>>>>>>> 2a5282fdab7d620860aad9d55da61efbc77744fd
     error.value = 'Не удалось загрузить статьи';
   } finally {
     loading.value = false;
@@ -97,6 +115,10 @@ const handleLogout = () => {
   sessionStorage.removeItem('userId');
   sessionStorage.removeItem('role');
   isLoggedIn.value = false;
+<<<<<<< HEAD
+=======
+  // Можно перенаправить, но не обязательно
+>>>>>>> 2a5282fdab7d620860aad9d55da61efbc77744fd
 };
 
 const handleCreateArticle = () => {
@@ -112,6 +134,7 @@ onMounted(() => {
 <template>
   <div class="news-page">
     <header class="page-header">
+<<<<<<< HEAD
       <div class="header-left">
         <h1 class="page-title">📰 Статьи</h1>
         <p class="page-subtitle">Читайте, изучайте, делитесь знаниями</p>
@@ -132,11 +155,22 @@ onMounted(() => {
           <router-link to="/registration" class="btn btn-primary">
             <span class="btn-icon">📝</span> Регистрация
           </router-link>
+=======
+      <h1 class="page-title">Статьи</h1>
+      <div class="auth-controls">
+        <button v-if="isLoggedIn" @click="handleLogout" class="btn btn-secondary">
+          Выйти
+        </button>
+        <div v-else>
+          <router-link to="/login" class="btn btn-outline">Войти</router-link>
+          <router-link to="/registration" class="btn btn-primary">Регистрация</router-link>
+>>>>>>> 2a5282fdab7d620860aad9d55da61efbc77744fd
         </div>
       </div>
     </header>
 
     <!-- Фильтры -->
+<<<<<<< HEAD
     <div class="filters-section">
       <ArticleFilters
           v-model="filters"
@@ -161,22 +195,59 @@ onMounted(() => {
           @go-to-page="goToPage"
       />
     </div>
+=======
+    <ArticleFilters
+        v-model="filters"
+        :available-categories="availableCategories"
+        @page-size-change="handlePageSizeChange"
+    />
+
+    <button
+        v-if="isLoggedIn"
+        @click="handleCreateArticle"
+        class="btn btn-primary"
+        style="margin-left: auto;"
+    >
+      Добавить статью
+    </button>
+
+    <!-- Список статей -->
+    <ArticleList
+        :articles="articles"
+        :loading="loading"
+        :error="error"
+    />
+
+    <!-- Пагинация -->
+    <Pagination
+        :meta="meta"
+        @go-to-page="goToPage"
+    />
+>>>>>>> 2a5282fdab7d620860aad9d55da61efbc77744fd
   </div>
 </template>
 
 <style scoped>
 .news-page {
+<<<<<<< HEAD
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px 48px;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
+=======
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px 48px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+>>>>>>> 2a5282fdab7d620860aad9d55da61efbc77744fd
 }
 
 .page-header {
   display: flex;
   justify-content: space-between;
+<<<<<<< HEAD
   align-items: flex-start;
   padding: 40px 0 30px;
   color: white;
@@ -334,5 +405,61 @@ onMounted(() => {
   .news-page {
     padding: 0 16px 32px;
   }
+=======
+  align-items: center;
+  padding: 24px 0;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.auth-controls {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  margin: 5px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #545b62;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: #007bff;
+  border: 1px solid #007bff;
+}
+
+.btn-outline:hover {
+  background-color: #f0f8ff;
+>>>>>>> 2a5282fdab7d620860aad9d55da61efbc77744fd
 }
 </style>
