@@ -1,9 +1,9 @@
 import { factories } from '@strapi/strapi';
 
 export default factories.createCoreRouter('api::article.article', {
-    config: {
-        delete: {
-            policies: ['api::article.is-owner-or-editor']
-        }
-    }
+  config: {
+    delete: {
+      policies: ['api::article.is-owner-or-editor'],
+    },
+  },
 });
