@@ -1,5 +1,5 @@
 ﻿<script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import api from '@/api/api';
 import router from '../../router/index.js';
@@ -8,32 +8,25 @@ const route = useRoute();
 const article = ref(null);
 const loading = ref(true);
 const error = ref(null);
-
 const canEdit = ref(false);
 
 async function checkCanEdit() {
   const role = sessionStorage.getItem('role');
-  const articleId = route.query.id;
-  const userId = sessionStorage.getItem('userId');
+  const articleId = route.params.id;
 
   if (!role || !article.value || !articleId) {
     canEdit.value = false;
     return;
   }
 
-  if (role === 'Editor') {
+  // Только Editor или Administrator могут редактировать/удалять
+  if (role === 'Editor' || role === 'Administrator') {
     canEdit.value = true;
-    return;
+  } else {
+    canEdit.value = false;
   }
-
-  const author = await api.getAuthor(articleId);
-  console.log(author.data.data.id);
-  console.log(userId);
-
-  if (!!author && String(author.data.data.id) === String(userId)) {
-    console.log('aaaaa');
-    canEdit.value = true;
-  }
+  
+  // Убрали проверку на автора - теперь владелец не может редактировать
 }
 
 const loadArticle = async () => {
@@ -66,7 +59,7 @@ const handleDelete = async () => {
 
   try {
     await api.deleteArticle(article.value.id);
-    await router.push(`/news`); // или список статей
+    await router.push(`/news`);
   } catch (err) {
     console.error('Ошибка удаления статьи:', err);
     alert('Не удалось удалить статью');
@@ -138,6 +131,7 @@ onMounted(() => {
         </div>
       </div>
 
+      <!-- Кнопки редактирования/удаления (только для Editor/Admin) -->
       <div v-if="canEdit" class="article-actions">
         <button class="btn btn-edit" @click="handleEdit">✏️ Изменить</button>
         <button class="btn btn-delete" @click="handleDelete">🗑️ Удалить</button>
@@ -375,22 +369,7 @@ onMounted(() => {
   font-style: italic;
 }
 
-/* Адаптивность */
-@media (max-width: 600px) {
-  .article-title {
-    font-size: 1.75rem;
-  }
-
-  .article-excerpt {
-    font-size: 1rem;
-  }
-
-  .article-meta {
-    flex-direction: column;
-    gap: 12px;
-  }
-}
-
+/* Кнопки действий */
 .article-actions {
   display: flex;
   gap: 12px;
@@ -424,5 +403,25 @@ onMounted(() => {
 
 .btn-delete:hover {
   background: #a71e2a;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+  .article-title {
+    font-size: 1.75rem;
+  }
+
+  .article-excerpt {
+    font-size: 1rem;
+  }
+
+  .article-meta {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .article-actions {
+    flex-direction: column;
+  }
 }
 </style>
