@@ -1,0 +1,32 @@
+// frontend/.prettierrc.cjs
+module.exports = {
+  semi: true,
+  trailingComma: 'es5',
+  singleQuote: true,
+  tabWidth: 2,
+  printWidth: 100,
+  useTabs: false,
+  bracketSpacing: true,
+  bracketSameLine: false,
+  arrowParens: 'always',
+  endOfLine: 'auto', // 'auto' вместо 'lf' для кросс-платформенности
+  htmlWhitespaceSensitivity: 'css',
+  vueIndentScriptAndStyle: false, // отключаем автоотступы в Vue
+  // Отключаем строгие правила форматирования
+  proseWrap: 'preserve',
+  overrides: [
+    {
+      files: '*.vue',
+      options: {
+        parser: 'vue',
+        printWidth: 120, // увеличиваем для Vue файлов
+      },
+    },
+    {
+      files: '*.html',
+      options: {
+        parser: 'html',
+      },
+    },
+  ],
+};
