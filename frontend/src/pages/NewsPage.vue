@@ -27,7 +27,7 @@ const error = ref(null);
 const filters = ref({
   category: '',
   sort: 'publishedAt:desc',
-  pageSize: 10
+  pageSize: 10,
 });
 
 // Получаем все категории
@@ -37,9 +37,9 @@ const loadCategories = async () => {
   try {
     const response = await api.getCategories();
     // Предполагается, что категории — { id, name, slug }
-    availableCategories.value = response.data.data.map(cat => ({
+    availableCategories.value = response.data.data.map((cat) => ({
       label: cat.name || cat.slug,
-      value: cat.slug
+      value: cat.slug,
     }));
   } catch (err) {
     console.error('Не удалось загрузить категории:', err);
@@ -56,7 +56,7 @@ const loadArticles = async (page = 1) => {
       page: meta.value.page,
       pageSize: filters.value.pageSize,
       sort: filters.value.sort,
-      category: filters.value.category
+      category: filters.value.category,
     };
 
     const response = await api.getArticles(params);
@@ -113,9 +113,7 @@ onMounted(() => {
     <header class="page-header">
       <h1 class="page-title">Статьи</h1>
       <div class="auth-controls">
-        <button v-if="isLoggedIn" @click="handleLogout" class="btn btn-secondary">
-          Выйти
-        </button>
+        <button v-if="isLoggedIn" class="btn btn-secondary" @click="handleLogout">Выйти</button>
         <div v-else>
           <router-link to="/login" class="btn btn-outline">Войти</router-link>
           <router-link to="/registration" class="btn btn-primary">Регистрация</router-link>
@@ -125,32 +123,25 @@ onMounted(() => {
 
     <!-- Фильтры -->
     <ArticleFilters
-        v-model="filters"
-        :available-categories="availableCategories"
-        @page-size-change="handlePageSizeChange"
+      v-model="filters"
+      :available-categories="availableCategories"
+      @page-size-change="handlePageSizeChange"
     />
 
     <button
-        v-if="isLoggedIn"
-        @click="handleCreateArticle"
-        class="btn btn-primary"
-        style="margin-left: auto;"
+      v-if="isLoggedIn"
+      class="btn btn-primary"
+      style="margin-left: auto"
+      @click="handleCreateArticle"
     >
       Добавить статью
     </button>
 
     <!-- Список статей -->
-    <ArticleList
-        :articles="articles"
-        :loading="loading"
-        :error="error"
-    />
+    <ArticleList :articles="articles" :loading="loading" :error="error" />
 
     <!-- Пагинация -->
-    <Pagination
-        :meta="meta"
-        @go-to-page="goToPage"
-    />
+    <Pagination :meta="meta" @go-to-page="goToPage" />
   </div>
 </template>
 

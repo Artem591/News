@@ -4,49 +4,13 @@ defineProps({
     type: Object,
     required: true,
     validator(value) {
-      return ['page', 'pageCount', 'total'].every(key => key in value);
-    }
-  }
+      return ['page', 'pageCount', 'total'].every((key) => key in value);
+    },
+  },
 });
 
 const emit = defineEmits(['goToPage']);
 </script>
-
-<template>
-  <div v-if="meta.pageCount > 1" class="pagination">
-    <button
-        @click="$emit('goToPage', meta.page - 1)"
-        :disabled="meta.page <= 1"
-        class="pagination-btn"
-        aria-label="Предыдущая страница"
-    >
-      Назад
-    </button>
-
-    <template v-for="pageNum in visiblePages" :key="pageNum">
-      <button
-          @click="$emit('goToPage', pageNum)"
-          :disabled="pageNum === meta.page"
-          :class="['pagination-btn', { 'active': pageNum === meta.page }]"
-      >
-        {{ pageNum }}
-      </button>
-    </template>
-
-    <button
-        @click="$emit('goToPage', meta.page + 1)"
-        :disabled="meta.page >= meta.pageCount"
-        class="pagination-btn"
-        aria-label="Следующая страница"
-    >
-      Вперёд
-    </button>
-  </div>
-
-  <div v-if="meta.pageCount > 1" class="pagination-info">
-    Страница {{ meta.page }} из {{ meta.pageCount }} (всего: {{ meta.total }})
-  </div>
-</template>
 
 <script>
 export default {
@@ -63,10 +27,46 @@ export default {
       const start = Math.max(1, current - Math.floor(maxVisible / 2));
       const end = Math.min(total, start + maxVisible - 1);
       return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-    }
-  }
+    },
+  },
 };
 </script>
+
+<template>
+  <div v-if="meta.pageCount > 1" class="pagination">
+    <button
+      :disabled="meta.page <= 1"
+      class="pagination-btn"
+      aria-label="Предыдущая страница"
+      @click="$emit('goToPage', meta.page - 1)"
+    >
+      Назад
+    </button>
+
+    <template v-for="pageNum in visiblePages" :key="pageNum">
+      <button
+        :disabled="pageNum === meta.page"
+        :class="['pagination-btn', { active: pageNum === meta.page }]"
+        @click="$emit('goToPage', pageNum)"
+      >
+        {{ pageNum }}
+      </button>
+    </template>
+
+    <button
+      :disabled="meta.page >= meta.pageCount"
+      class="pagination-btn"
+      aria-label="Следующая страница"
+      @click="$emit('goToPage', meta.page + 1)"
+    >
+      Вперёд
+    </button>
+  </div>
+
+  <div v-if="meta.pageCount > 1" class="pagination-info">
+    Страница {{ meta.page }} из {{ meta.pageCount }} (всего: {{ meta.total }})
+  </div>
+</template>
 
 <style scoped>
 .pagination {

@@ -2,12 +2,12 @@
 const props = defineProps({
   modelValue: {
     type: Object,
-    required: true
+    required: true,
   },
   availableCategories: {
     type: Array,
-    default: () => []
-  }
+    default: () => [],
+  },
 });
 
 const emit = defineEmits(['update:modelValue', 'pageSizeChange']);
@@ -28,17 +28,13 @@ const handlePageSizeChange = (event) => {
     <div class="filter-group">
       <label for="category-filter">Категория:</label>
       <select
-          id="category-filter"
-          :value="modelValue.category"
-          @change="updateFilter('category', $event.target.value)"
-          class="select-input"
+        id="category-filter"
+        :value="modelValue.category"
+        class="select-input"
+        @change="updateFilter('category', $event.target.value)"
       >
         <option value="">Все категории</option>
-        <option
-            v-for="cat in availableCategories"
-            :key="cat.value"
-            :value="cat.value"
-        >
+        <option v-for="cat in availableCategories" :key="cat.value" :value="cat.value">
           {{ cat.label }}
         </option>
       </select>
@@ -48,10 +44,10 @@ const handlePageSizeChange = (event) => {
     <div class="filter-group">
       <label for="sort-select">Сортировка:</label>
       <select
-          id="sort-select"
-          :value="modelValue.sort"
-          @change="updateFilter('sort', $event.target.value)"
-          class="select-input"
+        id="sort-select"
+        :value="modelValue.sort"
+        class="select-input"
+        @change="updateFilter('sort', $event.target.value)"
       >
         <option value="publishedAt:desc">Сначала новые</option>
         <option value="publishedAt:asc">Сначала старые</option>
@@ -62,11 +58,7 @@ const handlePageSizeChange = (event) => {
     <div class="filter-group">
       <label>
         Статей на странице:
-        <select
-            :value="modelValue.pageSize"
-            @change="handlePageSizeChange"
-            class="select-input"
-        >
+        <select :value="modelValue.pageSize" class="select-input" @change="handlePageSizeChange">
           <option :value="1">1</option>
           <option :value="25">25</option>
           <option :value="50">50</option>

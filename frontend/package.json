@@ -9,17 +9,35 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint . --quiet",
+    "lint:fix": "eslint . --fix --quiet",
+    "format": "prettier --write . --loglevel warn",
+    "format:check": "prettier --check . --loglevel warn",
+    "type-check": "vue-tsc --noEmit",
+    "validate": "npm run lint && npm run format:check && npm run type-check"
+  
   },
   "dependencies": {
+    "@babel/eslint-parser": "^7.28.5",
+    "@eslint/js": "^9.39.2",
     "axios": "^1.13.1",
     "bootstrap": "^5.3.8",
+    "globals": "^16.5.0",
     "vue": "^3.5.22",
     "vue-router": "^4.6.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/eslint-config-prettier": "^9.0.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-vue": "^9.33.0",
+    "prettier": "^3.7.4",
     "vite": "^7.1.11",
-    "vite-plugin-vue-devtools": "^8.0.3"
+    "vite-plugin-vue-devtools": "^8.0.3",
+    "vue-eslint-parser": "^9.4.3",
+    "vue-tsc": "^2.2.0"
   }
 }

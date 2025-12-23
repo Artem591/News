@@ -1,8 +1,7 @@
 ﻿<script setup>
-import userAuthorization from "../composables/userAuthorization.js";
+import userAuthorization from '../composables/userAuthorization.js';
 
-const {formData, submitForm, error} = userAuthorization();
-
+const { formData, submitForm, error } = userAuthorization();
 </script>
 
 <template>
@@ -11,11 +10,25 @@ const {formData, submitForm, error} = userAuthorization();
       <h1 class="h3 mb-3 fw-normal">Sign on</h1>
 
       <div class="form-floating">
-        <input type="text" class="form-control" id="floatingName" placeholder="Username" v-model="formData.identifier" required>
+        <input
+          id="floatingName"
+          v-model="formData.identifier"
+          type="text"
+          class="form-control"
+          placeholder="Username"
+          required
+        />
         <label for="floatingName">Email</label>
       </div>
       <div class="form-floating">
-        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" v-model="formData.password" required>
+        <input
+          id="floatingPassword"
+          v-model="formData.password"
+          type="password"
+          class="form-control"
+          placeholder="Password"
+          required
+        />
         <label for="floatingPassword">Password</label>
       </div>
 
@@ -44,19 +57,18 @@ const {formData, submitForm, error} = userAuthorization();
   min-height: 100vh;
 }
 
-.form-signin form{
+.form-signin form {
   width: 100%;
   background-color: #f5f5f5;
   padding: 30px;
   border-radius: 25px;
 }
 
-.form-signin div{
+.form-signin div {
   margin-bottom: 10px;
 }
 
 .form-signin {
   font-weight: 400;
 }
-
 </style>

@@ -1,8 +1,8 @@
 ﻿<script setup>
-import {ref, onMounted, computed} from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import api from '@/api/api';
-import router from "../../router/index.js";
+import router from '../../router/index.js';
 
 const route = useRoute();
 const article = ref(null);
@@ -12,29 +12,26 @@ const error = ref(null);
 const canEdit = ref(false);
 
 async function checkCanEdit() {
-  const role = sessionStorage.getItem("role");
+  const role = sessionStorage.getItem('role');
   const articleId = route.query.id;
-  const userId = sessionStorage.getItem("userId");
+  const userId = sessionStorage.getItem('userId');
 
-  if (!role || !article.value || !articleId)
-  {
+  if (!role || !article.value || !articleId) {
     canEdit.value = false;
     return;
   }
 
-  if (role === 'Editor')
-  {
+  if (role === 'Editor') {
     canEdit.value = true;
     return;
   }
 
-  const author = await api.getAuthor(articleId)
-  console.log(author.data.data.id)
-  console.log(userId)
+  const author = await api.getAuthor(articleId);
+  console.log(author.data.data.id);
+  console.log(userId);
 
-  if (!!author && String(author.data.data.id) === String(userId))
-  {
-    console.log("aaaaa")
+  if (!!author && String(author.data.data.id) === String(userId)) {
+    console.log('aaaaa');
     canEdit.value = true;
   }
 }
@@ -84,7 +81,7 @@ onMounted(() => {
 <template>
   <div class="article-detail-container">
     <div v-if="loading" class="article-loader">
-      <div class="spinner"></div>
+      <div class="spinner" />
       <p>Загрузка статьи...</p>
     </div>
 
@@ -97,9 +94,9 @@ onMounted(() => {
       <!-- Обложка -->
       <div v-if="article.coverImage" class="article-cover-wrapper">
         <img
-            :src="`http://localhost:1337${article.coverImage.url}`"
-            :alt="article.title || 'Обложка статьи'"
-            class="article-cover"
+          :src="`http://localhost:1337${article.coverImage.url}`"
+          :alt="article.title || 'Обложка статьи'"
+          class="article-cover"
         />
       </div>
 
@@ -111,7 +108,7 @@ onMounted(() => {
 
       <div v-if="article.category" class="article-category">
         Категория:
-        <span>{{article.category.name}}</span>
+        <span>{{ article.category.name }}</span>
       </div>
 
       <!-- Метаинформация -->
@@ -119,13 +116,15 @@ onMounted(() => {
         <div class="meta-item">
           <span class="meta-label">Дата публикации:</span>
           <time :datetime="article.publishedAt">
-            {{ new Date(article.publishedAt).toLocaleDateString('ru-RU', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-          }) }}
+            {{
+              new Date(article.publishedAt).toLocaleDateString('ru-RU', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              })
+            }}
           </time>
         </div>
 
@@ -140,21 +139,17 @@ onMounted(() => {
       </div>
 
       <div v-if="canEdit" class="article-actions">
-        <button @click="handleEdit" class="btn btn-edit">✏️ Изменить</button>
-        <button @click="handleDelete" class="btn btn-delete">🗑️ Удалить</button>
+        <button class="btn btn-edit" @click="handleEdit">✏️ Изменить</button>
+        <button class="btn btn-delete" @click="handleDelete">🗑️ Удалить</button>
       </div>
 
       <!-- Теги -->
       <div v-if="article.tags && typeof article.tags === 'object'" class="article-tags">
         <span class="tags-label">Теги:</span>
         <div class="tags-list">
-    <span
-        v-for="(tag, key) in article.tags"
-        :key="key"
-        class="tag"
-    >
-      {{ tag }}
-    </span>
+          <span v-for="(tag, key) in article.tags" :key="key" class="tag">
+            {{ tag }}
+          </span>
         </div>
       </div>
 
@@ -176,16 +171,21 @@ onMounted(() => {
               <strong v-if="child.bold">{{ child.text }}</strong>
               <em v-else-if="child.italic">{{ child.text }}</em>
               <u v-else-if="child.underline">{{ child.text }}</u>
-              <a v-else-if="child.type === 'link'" :href="child.url" target="_blank" rel="noopener noreferrer">{{ child.text }}</a>
+              <a
+                v-else-if="child.type === 'link'"
+                :href="child.url"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {{ child.text }}
+              </a>
               <span v-else>{{ child.text }}</span>
             </template>
           </p>
         </template>
       </div>
 
-      <div v-else class="empty-content">
-        Контент статьи отсутствует.
-      </div>
+      <div v-else class="empty-content">Контент статьи отсутствует.</div>
     </article>
 
     <div v-else class="article-not-found">
@@ -225,18 +225,24 @@ onMounted(() => {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Ошибка */
-.article-error, .article-not-found {
+.article-error,
+.article-not-found {
   text-align: center;
   padding: 60px 20px;
   color: #d32f2f;
 }
 
-.error-icon, .not-found-icon {
+.error-icon,
+.not-found-icon {
   font-size: 2.5rem;
   margin-bottom: 16px;
 }
@@ -246,7 +252,7 @@ onMounted(() => {
   margin: -24px -24px 24px;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .article-cover {
@@ -341,8 +347,12 @@ onMounted(() => {
   color: #222;
 }
 
-.h2 { font-size: 1.5rem; }
-.h3 { font-size: 1.25rem; }
+.h2 {
+  font-size: 1.5rem;
+}
+.h3 {
+  font-size: 1.25rem;
+}
 
 .content-paragraph {
   margin-bottom: 16px;

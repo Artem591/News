@@ -12,13 +12,22 @@
     "start": "strapi start",
     "strapi": "strapi",
     "upgrade": "npx @strapi/upgrade latest",
-    "upgrade:dry": "npx @strapi/upgrade latest --dry"
+    "upgrade:dry": "npx @strapi/upgrade latest --dry",
+    "lint": "eslint . --ext .js,.ts,.jsx,.tsx --quiet",
+    "lint:fix": "eslint . --ext .js,.ts,.jsx,.tsx --fix --quiet",
+    "format": "prettier --write . --loglevel warn",
+    "format:check": "prettier --check . --loglevel warn",
+    "prepare": "husky",
+    "precommit": "npx lint-staged"
   },
   "dependencies": {
+    "@eslint/js": "^9.39.2",
     "@strapi/plugin-cloud": "5.29.0",
     "@strapi/plugin-users-permissions": "5.29.0",
     "@strapi/strapi": "^5.29.0",
     "axios": "^1.13.2",
+    "eslint": "^9.39.2",
+    "globals": "^16.5.0",
     "mysql2": "^3.9.8",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
@@ -26,9 +35,18 @@
     "styled-components": "^6.0.0"
   },
   "devDependencies": {
+    "@commitlint/config-conventional": "^20.2.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@typescript-eslint/eslint-plugin": "^8.50.1",
+    "@typescript-eslint/parser": "^8.50.1",
+    "commitlint": "^20.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
     "typescript": "^5"
   },
   "engines": {

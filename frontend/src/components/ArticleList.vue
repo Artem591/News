@@ -2,16 +2,16 @@
 defineProps({
   articles: {
     type: Array,
-    required: true
+    required: true,
   },
   loading: {
     type: Boolean,
-    default: false
+    default: false,
   },
   error: {
     type: String,
-    default: null
-  }
+    default: null,
+  },
 });
 </script>
 
@@ -23,23 +23,32 @@ defineProps({
       <p v-if="articles.length === 0" class="empty-state">Нет статей</p>
       <ul v-else>
         <li v-for="article in articles" :key="article.id" class="article-card">
-          <router-link :to="{path: `/news/${article.documentId}`, query: { id: article.id }}" class="article-link">
+          <router-link
+            :to="{ path: `/news/${article.documentId}`, query: { id: article.id } }"
+            class="article-link"
+          >
             <div class="article-content">
               <h3 class="article-title">{{ article.title }}</h3>
               <div v-if="article.category" class="article-category">
                 Категория:
-                <span>{{ typeof article.category === 'string' ? article.category : (article.category.name || article.category.slug) }}</span>
+                <span>
+                  {{
+                    typeof article.category === 'string'
+                      ? article.category
+                      : article.category.name || article.category.slug
+                  }}
+                </span>
               </div>
               <p class="article-excerpt">
                 Описание:
                 {{
                   article.excerpt ||
                   (article.content?.[0]?.children?.[0]?.text
-                      ? (() => {
+                    ? (() => {
                         const text = article.content[0].children[0].text;
                         return text.length > 10 ? text.substring(0, 10) + '...' : text;
                       })()
-                      : 'Описание отсутствует')
+                    : 'Описание отсутствует')
                 }}
               </p>
             </div>

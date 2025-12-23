@@ -63,7 +63,7 @@ const loadArticle = async () => {
     if (Array.isArray(article.content)) {
       for (const block of article.content) {
         if (block.type === 'paragraph' && Array.isArray(block.children)) {
-          plainText += block.children.map(child => child.text || '').join('');
+          plainText += block.children.map((child) => child.text || '').join('');
         }
       }
     }
@@ -142,8 +142,11 @@ const handleSubmit = async () => {
         excerpt: formData.value.excerpt.trim() || undefined,
         isFeatured: formData.value.isFeatured,
         tags: formData.value.tags
-            ? formData.value.tags.split(',').map(t => t.trim()).filter(t => t)
-            : undefined,
+          ? formData.value.tags
+              .split(',')
+              .map((t) => t.trim())
+              .filter((t) => t)
+          : undefined,
         category: formData.value.category ? parseInt(formData.value.category, 10) : undefined,
         coverImage: coverImageId, // null — удалит, ID — сохранит/заменит
       },
@@ -158,8 +161,7 @@ const handleSubmit = async () => {
     await router.push('/news');
   } catch (err) {
     console.error('Ошибка сохранения статьи:', err);
-    error.value =
-        err.message || 'Не удалось сохранить статью. Проверьте данные и права доступа.';
+    error.value = err.message || 'Не удалось сохранить статью. Проверьте данные и права доступа.';
   } finally {
     loading.value = false;
   }
@@ -178,42 +180,42 @@ onMounted(() => {
     <h1>{{ isEditing ? 'Редактировать статью' : 'Создать новую статью' }}</h1>
 
     <div v-if="loading && isEditing" class="loader">
-      <div class="spinner"></div>
+      <div class="spinner" />
       <p>Загрузка статьи...</p>
     </div>
 
-    <form v-else @submit.prevent="handleSubmit" class="article-form">
+    <form v-else class="article-form" @submit.prevent="handleSubmit">
       <div class="form-group">
         <label for="title">Заголовок *</label>
         <input
-            id="title"
-            v-model="formData.title"
-            type="text"
-            required
-            placeholder="Заголовок статьи"
+          id="title"
+          v-model="formData.title"
+          type="text"
+          required
+          placeholder="Заголовок статьи"
         />
       </div>
 
       <div class="form-group">
         <label for="content">Контент *</label>
         <textarea
-            id="content"
-            v-model="formData.content"
-            rows="10"
-            required
-            placeholder="Введите текст статьи..."
-        ></textarea>
+          id="content"
+          v-model="formData.content"
+          rows="10"
+          required
+          placeholder="Введите текст статьи..."
+        />
         <small>Текст будет преобразован в один абзац (параграф).</small>
       </div>
 
       <div class="form-group">
         <label for="excerpt">Краткое описание</label>
         <textarea
-            id="excerpt"
-            v-model="formData.excerpt"
-            rows="3"
-            placeholder="Краткое описание для превью"
-        ></textarea>
+          id="excerpt"
+          v-model="formData.excerpt"
+          rows="3"
+          placeholder="Краткое описание для превью"
+        />
       </div>
 
       <div class="form-group">
@@ -228,12 +230,7 @@ onMounted(() => {
 
       <div class="form-group">
         <label for="tags">Теги (через запятую)</label>
-        <input
-            id="tags"
-            v-model="formData.tags"
-            type="text"
-            placeholder="тег1, тег2, тег3"
-        />
+        <input id="tags" v-model="formData.tags" type="text" placeholder="тег1, тег2, тег3" />
       </div>
 
       <div class="form-group checkbox-group">
@@ -246,12 +243,7 @@ onMounted(() => {
       <!-- Обложка -->
       <div class="form-group">
         <label for="coverImageFile">Обложка</label>
-        <input
-            id="coverImageFile"
-            type="file"
-            accept="image/*"
-            @change="handleFileChange"
-        />
+        <input id="coverImageFile" type="file" accept="image/*" @change="handleFileChange" />
         <div v-if="coverImage.preview" class="image-preview">
           <img :src="coverImage.preview" alt="Превью обложки" />
         </div>
@@ -264,7 +256,7 @@ onMounted(() => {
       <!-- Кнопки -->
       <div class="form-actions">
         <button type="submit" :disabled="loading" class="btn btn-primary">
-          {{ loading ? 'Сохраняем...' : (isEditing ? 'Сохранить изменения' : 'Создать статью') }}
+          {{ loading ? 'Сохраняем...' : isEditing ? 'Сохранить изменения' : 'Создать статью' }}
         </button>
         <router-link to="/news" class="btn btn-outline">Отмена</router-link>
       </div>
@@ -299,8 +291,12 @@ onMounted(() => {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .article-form {
