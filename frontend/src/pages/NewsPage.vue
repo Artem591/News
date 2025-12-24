@@ -36,13 +36,18 @@ const availableCategories = ref([]);
 const loadCategories = async () => {
   try {
     const response = await api.getCategories();
+    console.log('Категории из API:', response.data.data); // Для отладки
     
+    // Исправленная обработка структуры
     availableCategories.value = response.data.data.map(cat => ({
-      label: cat.attributes?.name || cat.attributes?.slug,
-      value: cat.attributes?.slug
+      label: cat.name || cat.slug,
+      value: cat.slug
     }));
+    
+    console.log('Обработанные категории:', availableCategories.value);
   } catch (err) {
     console.error('Не удалось загрузить категории:', err);
+    availableCategories.value = [];
   }
 };
 
