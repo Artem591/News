@@ -24,10 +24,12 @@ const loading = ref(false);
 const error = ref(null);
 
 // Фильтры и сортировка
+// filters
 const filters = ref({
   category: '',
   sort: 'publishedAt:desc',
   pageSize: 10,
+  featured: '', // 'true' или ''
 });
 
 // Получаем все категории
@@ -53,25 +55,50 @@ const loadCategories = async () => {
 
 // Загрузка данных
 const loadArticles = async (page = 1) => {
+  console.log('=== НАЧАЛО ЗАГРУЗКИ СТАТЕЙ ===');
+  console.log('Текущая страница:', page);
+  console.log('Активные фильтры:', {
+    category: filters.value.category,
+    featured: filters.value.featured,
+    sort: filters.value.sort,
+    pageSize: filters.value.pageSize
+  });
+  
   loading.value = true;
   error.value = null;
 
   try {
+    // ВАЖНО: передаём ВСЕ параметры
     const params = {
       page: page,
       pageSize: filters.value.pageSize,
       sort: filters.value.sort,
       category: filters.value.category,
+      featured: filters.value.featured, // ✅ ЭТО КЛЮЧЕВОЙ ПАРАМЕТР
     };
 
+    console.log('📤 Отправляю в API.getArticles:', params);
+    
     const response = await api.getArticles(params);
+    
+    console.log('✅ Ответ получен:', {
+      totalArticles: response.data.data.length,
+      isFeaturedStatus: response.data.data.map(a => `${a.title}: ${a.isFeatured}`)
+    });
+    
     articles.value = response.data.data;
     meta.value = response.data.meta.pagination;
+    
   } catch (err) {
-    console.error('Ошибка загрузки статей:', err.response || err);
+    console.error('❌ Ошибка загрузки статей:', {
+      message: err.message,
+      response: err.response?.data,
+      status: err.response?.status
+    });
     error.value = 'Не удалось загрузить статьи';
   } finally {
     loading.value = false;
+    console.log('=== КОНЕЦ ЗАГРУЗКИ ===\n');
   }
 };
 

@@ -97,14 +97,28 @@ const textToRichText = (text) => {
 // Загрузка изображения в Strapi
 const uploadImage = async (file) => {
   if (!file) return null;
+  
+  const token = sessionStorage.getItem('token');
+  console.log('Токен:', token ? 'OK' : 'NO TOKEN');
+  console.log('Файл:', file.name, file.type, file.size);
+  
   const formDataImg = new FormData();
-  formDataImg.append('files', file);
+  
+  // Пробуем разные варианты ключа
+  formDataImg.append('files', file);  // основной для Strapi
+  // formDataImg.append('file', file);  // альтернатива
+  
   try {
     const response = await api.uploadImage(formDataImg);
+    console.log('Успешная загрузка:', response.data);
     return response.data[0]?.id || null;
   } catch (err) {
-    console.error('Ошибка загрузки изображения:', err);
-    throw new Error('Не удалось загрузить обложку');
+    console.error('Полная ошибка загрузки:', {
+      status: err.response?.status,
+      data: err.response?.data,
+      message: err.message
+    });
+    throw new Error(`Не удалось загрузить обложку: ${err.response?.data?.error?.message || err.message}`);
   }
 };
 

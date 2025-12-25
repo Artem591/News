@@ -40,6 +40,20 @@ const handlePageSizeChange = (event) => {
       </select>
     </div>
 
+    <!-- Фильтр по рекомендуемым -->
+    <div class="filter-group">
+      <label for="featured-filter">Тип:</label>
+      <select
+        id="featured-filter"
+        :value="modelValue.featured"
+        class="select-input"
+        @change="updateFilter('featured', $event.target.value)"
+      >
+        <option value="">Все статьи</option>
+        <option value="true">Только рекомендуемые</option>
+      </select>
+    </div>
+
     <!-- Сортировка -->
     <div class="filter-group">
       <label for="sort-select">Сортировка:</label>
@@ -51,6 +65,7 @@ const handlePageSizeChange = (event) => {
       >
         <option value="publishedAt:desc">Сначала новые</option>
         <option value="publishedAt:asc">Сначала старые</option>
+        <option value="views:desc">По популярности</option>
       </select>
     </div>
 
@@ -59,10 +74,10 @@ const handlePageSizeChange = (event) => {
       <label>
         Статей на странице:
         <select :value="modelValue.pageSize" class="select-input" @change="handlePageSizeChange">
-          <option :value="1">1</option>
+          <option :value="5">5</option>
+          <option :value="10">10</option>
           <option :value="25">25</option>
           <option :value="50">50</option>
-          <option :value="100">100</option>
         </select>
       </label>
     </div>
@@ -90,8 +105,10 @@ const handlePageSizeChange = (event) => {
 
 .select-input {
   margin-left: 8px;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 8px 12px;
+  border-radius: 8px;
   border: 1px solid #ced4da;
+  background: white;
+  font-size: 14px;
 }
 </style>

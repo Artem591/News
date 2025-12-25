@@ -25,7 +25,7 @@ export default function userAuthorization() {
   sessionStorage.setItem('userId', user.id);
   sessionStorage.setItem('token', jwt);
   
-  // Пробуем получить роль, но если ошибка 403 — ставим роль по умолчанию
+  
   try {
     const role = await authApi.getRole();
     sessionStorage.setItem('role', role.data.roleName);
